@@ -2505,7 +2505,7 @@ function updateWeatherIntelligence() {
     const TEAM = [
         "SHUBHAM RAJ SHARMA",
         "PAARIJAAT",
-        ,"RO LI BI ANN",
+        "RO LI BI ANN",
         "SURAJ KUMAR SINGH",
         "AAKASH YADAV",
         "RISHU RAJ"
