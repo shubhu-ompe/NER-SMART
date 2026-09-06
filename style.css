@@ -8709,3 +8709,48 @@ body {
         min-height: 250px !important;
     }
 }
+
+
+/* =========================================================
+   MOBILE ONLY — REMOVE OVERSIZED "CORRIDOR OPERATIONAL"
+   The operational status remains visible in the map footer.
+   Desktop/Laptop is completely untouched.
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .map-area .map-condition,
+    .map-area .map-condition#mapCondition {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        max-width: 0 !important;
+        max-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        overflow: hidden !important;
+    }
+
+}
+/* =========================================================
+   MOBILE ONLY — CENTER RESET SIMULATION BUTTON
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .demo-control #resetDemoBtn {
+        display: flex !important;
+        width: 100% !important;
+        margin: 0 auto !important;
+        align-self: center !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+}
