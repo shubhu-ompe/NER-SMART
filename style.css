@@ -8168,3 +8168,369 @@ body {
         min-width: 75px !important;
     }
 }
+
+
+/* =========================================================
+   NER-SMART — FINAL DESKTOP / 100% ZOOM FIX
+   Paste this block at the VERY END of style.css.
+
+   Purpose:
+   • Fix desktop layout at normal 100% browser zoom
+   • Keep cards inside the viewport
+   • Compact the dashboard on shorter laptop screens
+   • Preserve the existing desktop design
+   • Does NOT touch phone rules
+========================================================= */
+
+@media (min-width: 901px) {
+
+    html,
+    body {
+        width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    .app-shell {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .sidebar {
+        width: 252px !important;
+        min-width: 252px !important;
+    }
+
+    .main-content {
+        width: calc(100% - 252px) !important;
+        margin-left: 252px !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        overflow-x: hidden !important;
+        padding-left: clamp(22px, 2.0vw, 32px) !important;
+        padding-right: clamp(22px, 2.0vw, 32px) !important;
+    }
+
+    .top-header,
+    .mission-banner,
+    .kpi-grid,
+    .main-grid,
+    .lower-grid,
+    .demo-control,
+    .footer {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    /* Four KPI cards always stay inside the available desktop width. */
+    .kpi-grid {
+        grid-template-columns:
+            minmax(0, 1.25fr)
+            minmax(0, 1fr)
+            minmax(0, 1fr)
+            minmax(0, 1fr) !important;
+    }
+
+    .kpi-card {
+        min-width: 0 !important;
+    }
+
+    /* Map + AI engine share the row without overflowing. */
+    .main-grid {
+        grid-template-columns:
+            minmax(0, 1.45fr)
+            minmax(0, 0.9fr) !important;
+    }
+
+    .map-card,
+    .risk-card,
+    .dashboard-card {
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .map-card .card-header {
+        min-width: 0 !important;
+    }
+
+    .map-card .card-header > .map-controls {
+        display: flex !important;
+        flex: 0 0 auto !important;
+        gap: 8px !important;
+    }
+
+    .map-card .card-header .map-control {
+        white-space: nowrap !important;
+    }
+
+    .map-area {
+        width: auto !important;
+        max-width: calc(100% - 26px) !important;
+    }
+
+    .risk-score-area,
+    .risk-factors,
+    .ai-decision {
+        min-width: 0 !important;
+    }
+
+    /* Prevent long text from forcing a card wider. */
+    .card-header h2,
+    .mission-main h2,
+    .score-description strong,
+    .score-description p,
+    .mission-meta-item strong {
+        min-width: 0 !important;
+        overflow-wrap: anywhere;
+    }
+
+    .mission-main {
+        min-width: 0 !important;
+    }
+
+    .mission-meta {
+        min-width: 0 !important;
+        flex-shrink: 1 !important;
+    }
+}
+
+
+/* =========================================================
+   SHORT LAPTOP / NORMAL 100% ZOOM
+   The screenshot viewport is short because of the browser
+   toolbar. Compact only vertical spacing — never scale the
+   whole page or disturb the desktop grid.
+========================================================= */
+
+@media (min-width: 901px) and (max-height: 900px) {
+
+    .main-content {
+        padding-top: 20px !important;
+        padding-bottom: 22px !important;
+    }
+
+    .top-header {
+        margin-bottom: 15px !important;
+    }
+
+    .header-left h1 {
+        font-size: 25px !important;
+    }
+
+    .header-left p {
+        margin-top: 4px !important;
+    }
+
+    .mission-banner {
+        min-height: 92px !important;
+        padding: 14px 19px !important;
+        margin-bottom: 13px !important;
+    }
+
+    .mission-icon {
+        width: 46px !important;
+        height: 46px !important;
+        min-width: 46px !important;
+    }
+
+    .mission-main {
+        gap: 12px !important;
+    }
+
+    .mission-main h2 {
+        font-size: 18px !important;
+        margin-top: 4px !important;
+    }
+
+    .mission-route {
+        margin-top: 5px !important;
+    }
+
+    .mission-meta {
+        gap: 13px !important;
+    }
+
+    .mission-divider {
+        height: 25px !important;
+    }
+
+    .kpi-grid {
+        gap: 11px !important;
+        margin-bottom: 13px !important;
+    }
+
+    .kpi-card {
+        min-height: 112px !important;
+        padding: 14px 15px !important;
+    }
+
+    .kpi-card h3 {
+        font-size: 27px !important;
+        margin-top: 7px !important;
+    }
+
+    .score-ring {
+        width: 48px !important;
+        height: 48px !important;
+    }
+
+    .score-ring-inner {
+        width: 38px !important;
+        height: 38px !important;
+    }
+
+    .kpi-status {
+        margin-top: 9px !important;
+    }
+
+    .risk-meter,
+    .eta-progress {
+        margin-top: 9px !important;
+    }
+
+    .kpi-footer {
+        margin-top: 7px !important;
+    }
+
+    .main-grid {
+        gap: 12px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .card-header {
+        padding: 13px 15px 10px !important;
+    }
+
+    .card-header h2 {
+        font-size: 15px !important;
+    }
+
+    .map-area {
+        height: 285px !important;
+    }
+
+    .map-footer {
+        padding-top: 8px !important;
+        padding-bottom: 9px !important;
+    }
+
+    .risk-score-area {
+        padding-top: 0 !important;
+        padding-bottom: 9px !important;
+    }
+
+    .large-score-ring {
+        width: 86px !important;
+        height: 86px !important;
+    }
+
+    .risk-factors {
+        padding-bottom: 8px !important;
+    }
+
+    .risk-factor {
+        margin-bottom: 7px !important;
+    }
+
+    .ai-decision {
+        margin-bottom: 9px !important;
+        padding: 8px !important;
+    }
+
+    .lower-grid {
+        gap: 11px !important;
+    }
+}
+
+
+/* =========================================================
+   VERY SHORT LAPTOPS
+========================================================= */
+
+@media (min-width: 901px) and (max-height: 760px) {
+
+    .main-content {
+        padding-top: 15px !important;
+        padding-bottom: 16px !important;
+    }
+
+    .top-header {
+        margin-bottom: 11px !important;
+    }
+
+    .header-left h1 {
+        font-size: 23px !important;
+    }
+
+    .mission-banner {
+        min-height: 82px !important;
+        padding: 11px 16px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .mission-icon {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+    }
+
+    .mission-main h2 {
+        font-size: 16px !important;
+    }
+
+    .kpi-grid {
+        gap: 9px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .kpi-card {
+        min-height: 96px !important;
+        padding: 11px 13px !important;
+    }
+
+    .kpi-card h3 {
+        font-size: 24px !important;
+    }
+
+    .score-ring {
+        width: 43px !important;
+        height: 43px !important;
+    }
+
+    .score-ring-inner {
+        width: 34px !important;
+        height: 34px !important;
+    }
+
+    .main-grid {
+        gap: 10px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .map-area {
+        height: 245px !important;
+    }
+
+    .card-header {
+        padding: 10px 13px 8px !important;
+    }
+
+    .card-header h2 {
+        font-size: 14px !important;
+    }
+
+    .large-score-ring {
+        width: 76px !important;
+        height: 76px !important;
+    }
+
+    .risk-factor {
+        margin-bottom: 5px !important;
+    }
+
+    .ai-decision {
+        margin-bottom: 7px !important;
+        padding: 7px !important;
+    }
+}
