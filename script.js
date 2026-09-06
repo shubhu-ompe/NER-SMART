@@ -2104,3 +2104,812 @@ function updateWeatherIntelligence() {
         wind.textContent = "27 km/h";
     }
 }
+/* =========================================================
+/* =========================================================
+   NOVARQ OG TEAM — CINEMATIC LOGO ANIMATION
+========================================================= */
+
+(function () {
+
+    const teamMembers = [
+        "SHUBHAM RAJ SHARMA",
+        "PAARIJAAT",
+        "RO LI",
+        "SURAJ KUMAR SINGH",
+        "AAKASH YADAV",
+        "RISHU RAJ"
+    ];
+
+    let animationRunning = false;
+
+
+    /* =====================================================
+       CREATE OVERLAY
+    ===================================================== */
+
+    function createNovarqTeamOverlay() {
+
+        const overlay =
+            document.createElement("div");
+
+        overlay.className =
+            "novarq-team-overlay";
+
+
+        /* -------------------------------------------------
+           SINGLE BLACK SCREEN
+        ------------------------------------------------- */
+
+        const blackout =
+            document.createElement("div");
+
+        blackout.className =
+            "novarq-blackout";
+
+
+        /* -------------------------------------------------
+           CONTENT
+        ------------------------------------------------- */
+
+        const content =
+            document.createElement("div");
+
+        content.className =
+            "novarq-team-content";
+
+
+        const kicker =
+            document.createElement("div");
+
+        kicker.className =
+            "novarq-team-kicker";
+
+        kicker.textContent =
+            "NOVARQ • ORIGINAL CORE";
+
+
+        const title =
+            document.createElement("h1");
+
+        title.className =
+            "novarq-team-title";
+
+        title.textContent =
+            "OG TEAM MEMBERS OF NOVARQ";
+
+
+        const divider =
+            document.createElement("div");
+
+        divider.className =
+            "novarq-team-divider";
+
+
+        const list =
+            document.createElement("ol");
+
+        list.className =
+            "novarq-team-list";
+
+
+        /* -------------------------------------------------
+           TEAM MEMBERS
+        ------------------------------------------------- */
+
+        teamMembers.forEach(function (name, index) {
+
+            const member =
+                document.createElement("li");
+
+            member.className =
+                "novarq-team-member";
+
+
+            const number =
+                document.createElement("span");
+
+            number.className =
+                "novarq-team-number";
+
+            number.textContent =
+                String(index + 1).padStart(2, "0");
+
+
+            const nameElement =
+                document.createElement("span");
+
+            nameElement.className =
+                "novarq-team-name";
+
+            nameElement.textContent =
+                name;
+
+
+            member.appendChild(number);
+
+            member.appendChild(nameElement);
+
+            list.appendChild(member);
+
+        });
+
+
+        content.appendChild(kicker);
+
+        content.appendChild(title);
+
+        content.appendChild(divider);
+
+        content.appendChild(list);
+
+
+        /* -------------------------------------------------
+           BUILD
+        ------------------------------------------------- */
+
+        overlay.appendChild(blackout);
+
+        overlay.appendChild(content);
+
+        document.body.appendChild(overlay);
+
+
+        return overlay;
+
+    }
+
+
+
+    /* =====================================================
+       START CINEMATIC
+    ===================================================== */
+
+    function startNovarqTeamAnimation() {
+
+        if (animationRunning) {
+            return;
+        }
+
+        animationRunning = true;
+
+
+        /* -------------------------------------------------
+           LOGO CLICK EFFECT
+        ------------------------------------------------- */
+
+        const logo =
+            document.querySelector(
+                ".brand-mark img"
+            );
+
+
+        if (logo) {
+
+            logo.classList.add(
+                "novarq-logo-clicking"
+            );
+
+
+            setTimeout(function () {
+
+                logo.classList.remove(
+                    "novarq-logo-clicking"
+                );
+
+            }, 500);
+
+        }
+
+
+        /* -------------------------------------------------
+           CREATE
+        ------------------------------------------------- */
+
+        const overlay =
+            createNovarqTeamOverlay();
+
+
+        /* -------------------------------------------------
+           LOCK SCROLL
+        ------------------------------------------------- */
+
+        document.documentElement.style.overflow =
+            "hidden";
+
+        document.body.style.overflow =
+            "hidden";
+
+
+        /* -------------------------------------------------
+           CENTER → FULL BLACK
+        ------------------------------------------------- */
+
+        requestAnimationFrame(function () {
+
+            requestAnimationFrame(function () {
+
+                overlay.classList.add(
+                    "blackout-expand"
+                );
+
+            });
+
+        });
+
+
+        /* -------------------------------------------------
+           SHOW CONTENT
+        ------------------------------------------------- */
+
+        setTimeout(function () {
+
+            overlay.classList.add(
+                "show-content"
+            );
+
+        }, 1100);
+
+
+        /* -------------------------------------------------
+           NAMES ONE BY ONE
+        ------------------------------------------------- */
+
+        const members =
+            overlay.querySelectorAll(
+                ".novarq-team-member"
+            );
+
+
+        members.forEach(function (member, index) {
+
+            setTimeout(function () {
+
+                member.classList.add(
+                    "visible"
+                );
+
+            }, 1600 + (index * 560));
+
+        });
+
+
+        /* -------------------------------------------------
+           HOLD
+        ------------------------------------------------- */
+
+        const lastNameTime =
+            1600 +
+            ((members.length - 1) * 560);
+
+
+        const holdTime =
+            lastNameTime + 3500;
+
+
+        /* =================================================
+           EXIT
+           FULL BLACK → CENTER → DISAPPEAR
+        ================================================= */
+
+        setTimeout(function () {
+
+            overlay.classList.add(
+                "exit-animation"
+            );
+
+
+            /*
+               Give the content a moment to disappear.
+            */
+
+            setTimeout(function () {
+
+                overlay.classList.add(
+                    "blackout-collapse"
+                );
+
+            }, 100);
+
+
+            /*
+               Remove after the center-collapse
+               animation has finished.
+            */
+
+            setTimeout(function () {
+
+                overlay.remove();
+
+
+                document.documentElement.style.overflow =
+                    "";
+
+                document.body.style.overflow =
+                    "";
+
+                animationRunning = false;
+
+            }, 1050);
+
+
+        }, holdTime);
+
+    }
+
+
+
+    /* =====================================================
+       LOGO CLICK LISTENER
+    ===================================================== */
+
+    function setupNovarqLogoAnimation() {
+
+        const logo =
+            document.querySelector(
+                ".brand-mark img"
+            );
+
+
+        if (!logo) {
+            return;
+        }
+
+
+        logo.style.cursor =
+            "pointer";
+
+
+        logo.setAttribute(
+            "title",
+            "NOVARQ Original Team"
+        );
+
+
+        logo.addEventListener(
+            "click",
+            startNovarqTeamAnimation
+        );
+
+    }
+
+
+
+    /* =====================================================
+       INIT
+    ===================================================== */
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            setupNovarqLogoAnimation
+        );
+
+    } else {
+
+        setupNovarqLogoAnimation();
+
+    }
+
+})();
+/* =========================================================
+   NOVARQ CINEMATIC — FINAL DUST DISSOLVE OVERRIDE
+   Paste at the VERY END of script.js
+========================================================= */
+
+(function () {
+
+    const TEAM = [
+        "SHUBHAM RAJ SHARMA",
+        "PAARIJAAT",
+        "RO LI",
+        "SURAJ KUMAR SINGH",
+        "AAKASH YADAV",
+        "RISHU RAJ"
+    ];
+
+    let running = false;
+
+
+    function createDustCinematic() {
+
+        const overlay = document.createElement("div");
+        overlay.className = "novarq-final-cinematic";
+
+
+        /* BLACK SCREEN */
+
+        const black = document.createElement("div");
+        black.className = "novarq-final-black";
+
+
+        /* CONTENT */
+
+        const content = document.createElement("div");
+        content.className = "novarq-final-content";
+
+
+        const kicker = document.createElement("div");
+        kicker.className = "novarq-final-kicker";
+        kicker.textContent = "NOVARQ • ORIGINAL CORE";
+
+
+        const title = document.createElement("h1");
+        title.className = "novarq-final-title";
+        title.textContent = "OG TEAM MEMBERS OF NOVARQ";
+
+
+        const names = document.createElement("div");
+        names.className = "novarq-final-names";
+
+
+        TEAM.forEach(function (name, index) {
+
+            const item = document.createElement("div");
+
+            item.className = "novarq-final-name";
+
+            item.textContent = name;
+
+            item.style.setProperty(
+                "--name-index",
+                index
+            );
+
+            names.appendChild(item);
+
+        });
+
+
+        content.appendChild(kicker);
+        content.appendChild(title);
+        content.appendChild(names);
+
+        overlay.appendChild(black);
+        overlay.appendChild(content);
+
+        document.body.appendChild(overlay);
+
+
+        return {
+            overlay,
+            black,
+            content,
+            names
+        };
+    }
+
+
+
+    function createDustParticles(overlay) {
+
+        const dust = document.createElement("div");
+
+        dust.className = "novarq-final-dust";
+
+
+        const size = 12;
+
+        const cols =
+            Math.ceil(window.innerWidth / size);
+
+        const rows =
+            Math.ceil(window.innerHeight / size);
+
+
+        for (let y = 0; y < rows; y++) {
+
+            for (let x = 0; x < cols; x++) {
+
+                const particle =
+                    document.createElement("span");
+
+                particle.className =
+                    "novarq-final-particle";
+
+
+                particle.style.left =
+                    (x * size) + "px";
+
+                particle.style.top =
+                    (y * size) + "px";
+
+
+                particle.style.setProperty(
+                    "--dx",
+                    ((Math.random() - 0.5) * 100) + "px"
+                );
+
+                particle.style.setProperty(
+                    "--dy",
+                    ((Math.random() - 0.5) * 100) + "px"
+                );
+
+                particle.style.setProperty(
+                    "--delay",
+                    (Math.random() * 650) + "ms"
+                );
+
+
+                dust.appendChild(particle);
+
+            }
+
+        }
+
+
+        overlay.appendChild(dust);
+
+        return dust;
+    }
+
+
+
+    function startFinalCinematic() {
+
+        if (running) return;
+
+        running = true;
+
+
+        const logo =
+            document.querySelector(".brand-mark img");
+
+
+        if (!logo) {
+
+            running = false;
+
+            return;
+
+        }
+
+
+        /* Logo click */
+
+        logo.classList.add(
+            "novarq-logo-clicking"
+        );
+
+
+        setTimeout(function () {
+
+            logo.classList.remove(
+                "novarq-logo-clicking"
+            );
+
+        }, 500);
+
+
+        /* Create */
+
+        const scene =
+            createDustCinematic();
+
+
+        const overlay =
+            scene.overlay;
+
+
+        const black =
+            scene.black;
+
+
+        const content =
+            scene.content;
+
+
+        /* Lock scroll */
+
+        document.documentElement.style.overflow =
+            "hidden";
+
+        document.body.style.overflow =
+            "hidden";
+
+
+        /* -------------------------------------------------
+           ENTRY
+           CENTER → FULL BLACK
+        ------------------------------------------------- */
+
+        requestAnimationFrame(function () {
+
+            requestAnimationFrame(function () {
+
+                overlay.classList.add(
+                    "enter"
+                );
+
+            });
+
+        });
+
+
+        /* -------------------------------------------------
+           SHOW TITLE
+        ------------------------------------------------- */
+
+        setTimeout(function () {
+
+            overlay.classList.add(
+                "show"
+            );
+
+        }, 1050);
+
+
+        /* -------------------------------------------------
+           SHOW NAMES ONE BY ONE
+        ------------------------------------------------- */
+
+        const nameElements =
+            overlay.querySelectorAll(
+                ".novarq-final-name"
+            );
+
+
+        nameElements.forEach(function (name, index) {
+
+            setTimeout(function () {
+
+                name.classList.add(
+                    "visible"
+                );
+
+            }, 1550 + (index * 560));
+
+        });
+
+
+        /* -------------------------------------------------
+           HOLD
+        ------------------------------------------------- */
+
+        const lastName =
+            1550 +
+            ((TEAM.length - 1) * 560);
+
+
+        const hold =
+            lastName + 3500;
+
+
+        /* =================================================
+           EXIT — DUST DISSOLVE
+        ================================================= */
+
+        setTimeout(function () {
+
+            overlay.classList.add(
+                "leaving"
+            );
+
+
+            /*
+               Wait for the content to fade slightly,
+               then break the black screen into dust.
+            */
+
+            setTimeout(function () {
+
+                const dust =
+                    createDustParticles(
+                        overlay
+                    );
+
+
+                requestAnimationFrame(function () {
+
+                    dust.classList.add(
+                        "active"
+                    );
+
+                });
+
+            }, 280);
+
+
+            /*
+               Remove the complete cinematic after
+               particles have disappeared.
+            */
+
+            setTimeout(function () {
+
+                overlay.remove();
+
+                document.documentElement.style.overflow =
+                    "";
+
+                document.body.style.overflow =
+                    "";
+
+                running = false;
+
+            }, 1450);
+
+
+        }, hold);
+
+    }
+
+
+
+    /* =====================================================
+       FIND LOGO
+    ===================================================== */
+
+    function initFinalCinematic() {
+
+        const logo =
+            document.querySelector(
+                ".brand-mark img"
+            );
+
+
+        if (!logo) return;
+
+
+        /*
+           Prevent the old NOVARQ cinematic
+           listener from controlling this click.
+        */
+
+        const newLogo =
+            logo.cloneNode(true);
+
+
+        logo.parentNode.replaceChild(
+            newLogo,
+            logo
+        );
+
+
+        newLogo.style.cursor =
+            "pointer";
+
+
+        newLogo.setAttribute(
+            "title",
+            "NOVARQ Original Team"
+        );
+
+
+        newLogo.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                startFinalCinematic();
+
+            }
+        );
+
+    }
+
+
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initFinalCinematic
+        );
+
+    } else {
+
+        initFinalCinematic();
+
+    }
+
+})();
