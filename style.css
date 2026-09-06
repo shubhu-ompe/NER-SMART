@@ -8737,20 +8737,105 @@ body {
     }
 
 }
+
+
 /* =========================================================
-   MOBILE ONLY — CENTER RESET SIMULATION BUTTON
+   NER-SMART — MOBILE MAP + RESET FINAL OVERRIDE
+   MUST STAY AT THE VERY END OF style.css
+   Desktop / Laptop: untouched.
 ========================================================= */
 
-@media (max-width: 900px) {
+@media screen and (max-width: 900px) {
 
-    .demo-control #resetDemoBtn {
-        display: flex !important;
-        width: 100% !important;
-        margin: 0 auto !important;
-        align-self: center !important;
-        justify-content: center !important;
-        align-items: center !important;
-        text-align: center !important;
+    /* -----------------------------------------------------
+       1. REMOVE MAP "CORRIDOR OPERATIONAL" BOX COMPLETELY
+       The footer already contains Corridor Condition.
+    ----------------------------------------------------- */
+
+    .map-card .map-area #mapCondition,
+    .map-card .map-area .map-condition,
+    #mapCondition {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+
+        position: absolute !important;
+        pointer-events: none !important;
+
+        width: 0 !important;
+        height: 0 !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        max-width: 0 !important;
+        max-height: 0 !important;
+
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+
+        transform: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
     }
 
+    #mapCondition *,
+    #mapCondition::before,
+    #mapCondition::after {
+        display: none !important;
+    }
+
+
+    /* -----------------------------------------------------
+       2. RESET SIMULATION — TRUE CENTER ON MOBILE
+       Force the button itself to occupy the same content
+       width as Start Live Simulation.
+    ----------------------------------------------------- */
+
+    .demo-control {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        align-items: stretch !important;
+    }
+
+    .demo-control #startDemoBtn,
+    .demo-control #resetDemoBtn {
+        box-sizing: border-box !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        margin-inline: 0 !important;
+
+        align-self: stretch !important;
+
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+
+        text-align: center !important;
+
+        transform: none !important;
+    }
+
+    .demo-control #resetDemoBtn {
+        position: static !important;
+        left: auto !important;
+        right: auto !important;
+    }
+}
+
+
+/* Extra-small phones: keep both demo buttons identical. */
+@media screen and (max-width: 480px) {
+
+    .demo-control #startDemoBtn,
+    .demo-control #resetDemoBtn {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        align-self: stretch !important;
+    }
 }
