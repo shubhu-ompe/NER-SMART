@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -9,7 +10,9 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>NER-SMART | Logistics Intelligence</title>
+    <title>
+        NER-SMART | Logistics Intelligence
+    </title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -18,6 +21,7 @@
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     >
+
 </head>
 
 
@@ -32,14 +36,10 @@
 
     <aside class="sidebar">
 
-        <!-- BRAND -->
         <div class="brand">
 
             <div class="brand-mark">
-                <img
-                    src="photos/logo.png"
-                    alt="NER-SMART NOVARQ Logo"
-                >
+                <img src="photos/logo.png" alt="NER-SMART NOVARQ Logo">
             </div>
 
             <div class="brand-text">
@@ -50,7 +50,6 @@
         </div>
 
 
-        <!-- OPERATIONS -->
         <div class="sidebar-section">
 
             <span class="section-title">
@@ -79,13 +78,15 @@
                     <span>Field Intelligence</span>
                 </button>
 
+                <button class="nav-item" id="fieldOperationsNav">
+                    <span class="nav-icon">◎</span>
+                    <span>Field Operations</span>
+                </button>
+
                 <button class="nav-item">
                     <span class="nav-icon">!</span>
                     <span>Alerts</span>
-
-                    <span class="nav-count">
-                        2
-                    </span>
+                    <span class="nav-count">2</span>
                 </button>
 
             </nav>
@@ -93,7 +94,6 @@
         </div>
 
 
-        <!-- SYSTEM -->
         <div class="sidebar-section">
 
             <span class="section-title">
@@ -117,7 +117,6 @@
         </div>
 
 
-        <!-- SYSTEM STATUS -->
         <div class="sidebar-bottom">
 
             <div class="system-status">
@@ -125,16 +124,17 @@
                 <span class="status-dot"></span>
 
                 <div>
-                    <strong>
-                        All Systems
-                    </strong>
+
+                    <strong>All Systems</strong>
 
                     <small>
                         Operational
                     </small>
+
                 </div>
 
             </div>
+
 
             <div class="version">
                 NER-SMART v1.0 • SIH 2026
@@ -153,9 +153,7 @@
     <main class="main-content">
 
 
-        <!-- =====================================================
-             TOP HEADER
-        ====================================================== -->
+        <!-- TOP HEADER -->
 
         <header class="top-header">
 
@@ -176,12 +174,21 @@
             </div>
 
 
-            <!--
-                LIVE NETWORK and TIME intentionally removed.
-                Operations profile remains at top-right.
-            -->
-
             <div class="header-right">
+
+                <div class="live-indicator">
+
+                    <span></span>
+
+                    LIVE NETWORK
+
+                </div>
+
+
+                <div class="header-time">
+                    14:32:08 IST
+                </div>
+
 
                 <div class="profile">
 
@@ -210,7 +217,7 @@
 
 
         <!-- =====================================================
-             ACTIVE PRIORITY MISSION
+             ACTIVE MISSION
         ====================================================== -->
 
         <section class="mission-banner">
@@ -231,6 +238,7 @@
                     <h2>
                         Critical Medicine Delivery
                     </h2>
+
 
                     <div class="mission-route">
 
@@ -312,7 +320,6 @@
         <section class="kpi-grid">
 
 
-            <!-- ACCESSIBILITY SCORE -->
             <div class="kpi-card score-card">
 
                 <div class="kpi-top">
@@ -363,7 +370,6 @@
 
 
 
-            <!-- WEATHER RISK -->
             <div class="kpi-card">
 
                 <div class="kpi-heading">
@@ -418,7 +424,6 @@
 
 
 
-            <!-- CURRENT ETA -->
             <div class="kpi-card">
 
                 <div class="kpi-heading">
@@ -465,7 +470,6 @@
 
 
 
-            <!-- ACTIVE FLEET -->
             <div class="kpi-card">
 
                 <div class="kpi-heading">
@@ -533,34 +537,28 @@
                     </div>
 
 
-                    <!-- VALID BUTTON WRAPPER -->
-                    <div class="map-controls">
+                    <button
+                         class="map-controls">
 
-                        <button
-                            class="map-control"
-                            id="mapResetBtn"
-                            type="button"
-                        >
-                            ⟳ Reset
-                        </button>
+    <button
+        class="map-control"
+        id="mapResetBtn"
+    >
+        ⟳ Reset
+    </button>
 
-                        <button
-                            class="map-control"
-                            id="mapFullscreenBtn"
-                            type="button"
-                        >
-                            ⛶ Full Screen
-                        </button>
+    <button
+        class="map-control"
+        id="mapFullscreenBtn"
+    >
+        ⛶ Full Screen
+    </button>
 
-                    </div>
-
-                </div>
+</div>
 
 
 
-                <!-- =================================================
-                     ACTUAL MAP
-                ================================================== -->
+                <!-- ACTUAL MAP -->
 
                 <div class="map-area">
 
@@ -647,9 +645,7 @@
                     </div>
 
 
-                    <!-- MAP SCALE
-                         Hidden visually by CSS as requested.
-                    -->
+                    <!-- SCALE -->
 
                     <div class="map-scale-custom">
 
@@ -675,9 +671,7 @@
 
 
 
-                <!-- =================================================
-                     MAP FOOTER
-                ================================================== -->
+                <!-- MAP FOOTER -->
 
                 <div class="map-footer">
 
@@ -763,9 +757,7 @@
 
 
 
-                <!-- =================================================
-                     AI SCORE
-                ================================================== -->
+                <!-- SCORE -->
 
                 <div class="risk-score-area">
 
@@ -794,9 +786,11 @@
                         </strong>
 
                         <p id="aiDescription">
+
                             NER-SMART is continuously evaluating
                             weather, road, terrain, field and
                             historical disruption signals.
+
                         </p>
 
                     </div>
@@ -805,14 +799,11 @@
 
 
 
-                <!-- =================================================
-                     RISK FACTORS
-                ================================================== -->
+                <!-- RISK FACTORS -->
 
                 <div class="risk-factors">
 
 
-                    <!-- WEATHER -->
                     <div class="risk-factor">
 
                         <div class="factor-info">
@@ -846,7 +837,6 @@
 
 
 
-                    <!-- ROAD -->
                     <div class="risk-factor">
 
                         <div class="factor-info">
@@ -880,7 +870,6 @@
 
 
 
-                    <!-- TERRAIN -->
                     <div class="risk-factor">
 
                         <div class="factor-info">
@@ -914,7 +903,6 @@
 
 
 
-                    <!-- FIELD -->
                     <div class="risk-factor">
 
                         <div class="factor-info">
@@ -948,7 +936,6 @@
 
 
 
-                    <!-- HISTORY -->
                     <div class="risk-factor">
 
                         <div class="factor-info">
@@ -984,9 +971,7 @@
 
 
 
-                <!-- =================================================
-                     AI DECISION
-                ================================================== -->
+                <!-- AI DECISION -->
 
                 <div class="ai-decision">
 
@@ -1025,11 +1010,10 @@
         <section class="lower-grid">
 
 
-            <!-- =================================================
-                 WEATHER INTELLIGENCE
-            ================================================== -->
+            <!-- WEATHER -->
 
             <div class="dashboard-card intelligence-card">
+
 
                 <div class="small-card-header">
 
@@ -1122,11 +1106,10 @@
 
 
 
-            <!-- =================================================
-                 FIELD INTELLIGENCE
-            ================================================== -->
+            <!-- FIELD INTELLIGENCE -->
 
             <div class="dashboard-card intelligence-card">
+
 
                 <div class="small-card-header">
 
@@ -1152,8 +1135,6 @@
 
                 </div>
 
-
-                <!-- REPORT ONE -->
 
                 <div
                     class="report-item"
@@ -1182,8 +1163,6 @@
 
                 </div>
 
-
-                <!-- REPORT TWO -->
 
                 <div
                     class="report-item"
@@ -1216,11 +1195,10 @@
 
 
 
-            <!-- =================================================
-                 SYSTEM ALERTS
-            ================================================== -->
+            <!-- ALERTS -->
 
             <div class="dashboard-card intelligence-card">
+
 
                 <div class="small-card-header">
 
@@ -1247,8 +1225,6 @@
                 </div>
 
 
-                <!-- ALERT ONE -->
-
                 <div
                     class="alert-item"
                     id="alertOne"
@@ -1273,8 +1249,6 @@
 
                 </div>
 
-
-                <!-- ALERT TWO -->
 
                 <div
                     class="alert-item"
@@ -1343,12 +1317,9 @@
             </div>
 
 
-            <!-- START SIMULATION -->
-
             <button
                 id="startDemoBtn"
                 class="start-demo-btn"
-                type="button"
             >
 
                 <span>
@@ -1358,25 +1329,190 @@
                 Start Live Simulation
 
             </button>
-
-
-            <!-- RESET SIMULATION -->
-
             <button
-                id="resetDemoBtn"
-                class="start-demo-btn"
-                type="button"
-            >
-
-                <span>
-                    ↻
-                </span>
-
-                Reset Simulation
-
-            </button>
+    id="resetDemoBtn"
+    class="start-demo-btn"
+>
+    <span>↻</span>
+    Reset Simulation
+</button>
 
         </section>
+
+
+        <!-- =====================================================
+             FIELD OPERATIONS HUB
+        ====================================================== -->
+
+        <section id="fieldOperationsHub" class="sih-ops-section">
+
+            <div class="sih-ops-grid">
+
+                <div class="sih-panel sih-field-panel">
+                    <div class="sih-panel-header">
+                        <div>
+                            <span class="sih-panel-kicker">FIELD INTELLIGENCE</span>
+                            <h2>Incident Report</h2>
+                            <p>Geo-tagged field updates for road, bridge and corridor conditions.</p>
+                        </div>
+                        <span class="sih-panel-badge">LOCAL INPUT</span>
+                    </div>
+
+                    <form id="fieldReportForm" class="sih-field-form">
+                        <div class="sih-form-row">
+                            <label class="sih-field">
+                                <span>Incident Type</span>
+                                <select id="incidentType" required>
+                                    <option value="Landslide">Landslide</option>
+                                    <option value="Flooding">Flooding</option>
+                                    <option value="Road Damage">Road Damage</option>
+                                    <option value="Bridge Issue">Bridge / Culvert Issue</option>
+                                    <option value="Traffic Blockage">Traffic Blockage</option>
+                                    <option value="Weather Hazard">Weather Hazard</option>
+                                </select>
+                            </label>
+
+                            <label class="sih-field">
+                                <span>District / Sector</span>
+                                <select id="incidentDistrict" required>
+                                    <option value="Tawang">Tawang</option>
+                                    <option value="West Kameng">West Kameng</option>
+                                    <option value="East Kameng">East Kameng</option>
+                                    <option value="Kamrup Metropolitan">Kamrup Metropolitan</option>
+                                    <option value="Dima Hasao">Dima Hasao</option>
+                                    <option value="Churachandpur">Churachandpur</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="sih-location-row">
+                            <label class="sih-field sih-location-field">
+                                <span>Geo Location</span>
+                                <input id="incidentLocation" type="text" placeholder="Latitude, Longitude" required>
+                            </label>
+                            <button type="button" id="useGpsBtn" class="sih-gps-btn">◎ Use Device GPS</button>
+                        </div>
+
+                        <label class="sih-field">
+                            <span>Incident Description</span>
+                            <textarea id="incidentDescription" rows="3" placeholder="Describe blockage, road condition, bridge status or supply impact..." required></textarea>
+                        </label>
+
+                        <label class="sih-field sih-file-field">
+                            <span>Photograph / Evidence</span>
+                            <input id="incidentPhoto" type="file" accept="image/*">
+                            <small>Photo stays attached to the local prototype report queue.</small>
+                        </label>
+
+                        <div class="sih-form-actions">
+                            <span id="fieldReportStatus" class="sih-form-status">Ready for field input</span>
+                            <button type="submit" class="sih-submit-btn">Submit Field Report</button>
+                        </div>
+                    </form>
+
+                    <div id="fieldReportLog" class="sih-report-log"></div>
+                </div>
+
+                <div class="sih-panel sih-sync-panel">
+                    <div class="sih-panel-header">
+                        <div>
+                            <span class="sih-panel-kicker">OFFLINE SUPPORT</span>
+                            <h2>Sync Center</h2>
+                            <p>Reports can remain queued during low-network conditions.</p>
+                        </div>
+                        <span id="networkStateBadge" class="sih-panel-badge">ONLINE</span>
+                    </div>
+
+                    <div class="sih-sync-card">
+                        <div class="sih-network-state">
+                            <span id="networkStateDot" class="sih-network-dot"></span>
+                            <div>
+                                <strong id="networkStateText">Network connected</strong>
+                                <small>Offline-first field reporting adapter</small>
+                            </div>
+                        </div>
+                        <div class="sih-sync-stats">
+                            <div><strong id="pendingReportCount">0</strong><span>Pending</span></div>
+                            <div><strong id="syncedReportCount">0</strong><span>Synced</span></div>
+                        </div>
+                        <button id="syncNowBtn" type="button" class="sih-sync-btn">↻ Sync Now</button>
+                    </div>
+
+                    <div class="sih-language-bar">
+                        <div>
+                            <span class="sih-panel-kicker">MULTILINGUAL ALERTS</span>
+                            <strong>Notification Language</strong>
+                        </div>
+                        <select id="alertLanguage">
+                            <option value="en">English</option>
+                            <option value="hi">हिन्दी</option>
+                            <option value="as">অসমীয়া</option>
+                        </select>
+                    </div>
+
+                    <div id="notificationPreview" class="sih-notification-preview">
+                        Route A blocked • Alternate corridor recommended. Authority notification prepared.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="sih-ops-grid sih-ops-grid-secondary">
+
+                <div class="sih-panel">
+                    <div class="sih-panel-header">
+                        <div>
+                            <span class="sih-panel-kicker">REGIONAL VISIBILITY</span>
+                            <h2>District Connectivity</h2>
+                            <p>Prototype monitoring view for representative NER corridors.</p>
+                        </div>
+                    </div>
+                    <div id="districtConnectivityGrid" class="sih-district-grid"></div>
+                </div>
+
+                <div class="sih-panel">
+                    <div class="sih-panel-header">
+                        <div>
+                            <span class="sih-panel-kicker">DATA INTEGRATION</span>
+                            <h2>Connected Intelligence</h2>
+                            <p>Integration adapters used by the prototype dashboard.</p>
+                        </div>
+                    </div>
+                    <div id="integrationStatusList" class="sih-integration-list"></div>
+
+                    <div class="sih-live-weather-strip">
+                        <div>
+                            <span>TAWANG LIVE WEATHER</span>
+                            <strong id="liveWeatherTemperature">--°C</strong>
+                        </div>
+                        <div>
+                            <strong id="liveWeatherCondition">Loading…</strong>
+                            <small id="liveWeatherDetails">Weather API connection</small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="sih-ops-summary">
+                <div class="sih-summary-item">
+                    <span>SUPPLY BOTTLENECK</span>
+                    <strong>Essential medicine movement monitored on Tawang corridor</strong>
+                </div>
+                <div class="sih-summary-item">
+                    <span>EMERGENCY ROUTE</span>
+                    <strong>Alternate corridor recommendation available</strong>
+                </div>
+                <div class="sih-summary-item">
+                    <span>FIELD EVIDENCE</span>
+                    <strong>Geo-tagged reports feed AI risk verification</strong>
+                </div>
+            </div>
+
+        </section>
+
+
+        
 
 
 
@@ -1409,9 +1545,8 @@
 ========================================================= -->
 
 <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-></script>
-
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
 
 
 <!-- =========================================================
