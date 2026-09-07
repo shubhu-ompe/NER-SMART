@@ -2116,7 +2116,7 @@ function updateWeatherIntelligence() {
         "PAARIJAAT",
         "RO LI BI ANN",
         "SURAJ KUMAR SINGH",
-        "AKASH YADAV",
+        "AAKASH YADAV",
         "RISHU RAJ"
     ];
 
@@ -2505,9 +2505,9 @@ function updateWeatherIntelligence() {
     const TEAM = [
         "SHUBHAM RAJ SHARMA",
         "PAARIJAAT",
-        "RO LI BI ANN",
+        ,"RO LI BI ANN",
         "SURAJ KUMAR SINGH",
-        "AKASH KUMAR",
+        "AAKASH YADAV",
         "RISHU RAJ"
     ];
 
@@ -2911,5 +2911,1302 @@ function updateWeatherIntelligence() {
         initFinalCinematic();
 
     }
+
+})();
+/* =========================================================
+   SIH 2026 REQUIREMENTS — FINAL FIELD OPERATIONS MODULE
+   Matches current index.html exactly
+========================================================= */
+
+(function () {
+    "use strict";
+
+    const STORAGE_KEY = "nersmart_field_reports_v1";
+
+    const weatherUrl =
+        "https://api.open-meteo.com/v1/forecast" +
+        "?latitude=27.5866" +
+        "&longitude=91.8590" +
+        "&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m" +
+        "&hourly=precipitation_probability" +
+        "&forecast_days=1" +
+        "&timezone=Asia%2FKolkata";
+
+    const $ = (id) => document.getElementById(id);
+
+    /* =====================================================
+       LOCAL STORAGE
+    ===================================================== */
+
+    function readReports() {
+        try {
+            const data =
+                JSON.parse(
+                    localStorage.getItem(STORAGE_KEY) || "[]"
+                );
+
+            return Array.isArray(data) ? data : [];
+
+        } catch (error) {
+            console.warn(
+                "NER-SMART: local report storage unavailable."
+            );
+
+            return [];
+        }
+    }
+
+    function writeReports(reports) {
+        try {
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify(reports)
+            );
+        } catch (error) {
+            console.warn(
+                "NER-SMART: unable to save field reports."
+            );
+        }
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    /* =====================================================
+       NETWORK STATE
+    ===================================================== */
+
+    function updateNetworkState() {
+
+        const online = navigator.onLine;
+
+        const badge =
+            $("networkStateBadge");
+
+        const dot =
+            $("networkStateDot");
+
+        const text =
+            $("networkStateText");
+
+        if (badge) {
+            badge.textContent =
+                online ? "ONLINE" : "OFFLINE";
+
+            badge.classList.toggle(
+                "offline",
+                !online
+            );
+        }
+
+        if (dot) {
+            dot.classList.toggle(
+                "offline",
+                !online
+            );
+        }
+
+        if (text) {
+            text.textContent =
+                online
+                    ? "Network connected"
+                    : "Offline mode active";
+        }
+
+        renderReports();
+    }
+
+    /* =====================================================
+       FIELD REPORT RENDERING
+    ===================================================== */
+
+    function renderReports() {
+
+        const log =
+            $("fieldReportLog");
+
+        const pending =
+            $("pendingReportCount");
+
+        const synced =
+            $("syncedReportCount");
+
+        if (!log) return;
+
+        const reports =
+            readReports();
+
+        const pendingCount =
+            reports.filter(
+                (report) =>
+                    report.status === "pending"
+            ).length;
+
+        const syncedCount =
+            reports.filter(
+                (report) =>
+                    report.status === "synced"
+            ).length;
+
+        if (pending) {
+            pending.textContent =
+                pendingCount;
+        }
+
+        if (synced) {
+            synced.textContent =
+                syncedCount;
+        }
+
+        if (!reports.length) {
+
+            log.innerHTML = `
+                <div class="sih-empty-state">
+                    No new field reports in the local queue.
+                </div>
+            `;
+
+            return;
+        }
+
+        log.innerHTML =
+            reports
+                .slice(-4)
+                .reverse()
+                .map((report) => {
+
+                    const status =
+                        report.status === "pending"
+                            ? "PENDING SYNC"
+                            : "SYNCED";
+
+                    const when =
+                        new Date(
+                            report.timestamp
+                        ).toLocaleString(
+                            "en-IN",
+                            {
+                                day: "2-digit",
+                                month: "short",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            }
+                        );
+
+                    return `
+                        <div class="sih-report-item">
+
+                            <div class="sih-report-main">
+
+                                <strong>
+                                    ${escapeHtml(report.type)}
+                                </strong>
+
+                                <span>
+                                    ${escapeHtml(report.district)}
+                                </span>
+
+                            </div>
+
+                            <div class="sih-report-meta">
+
+                                <span>
+                                    ${escapeHtml(
+                                        report.location ||
+                                        "Location unavailable"
+                                    )}
+                                </span>
+
+                                <span>
+                                    ${when}
+                                </span>
+
+                            </div>
+
+                            <div class="sih-report-status ${report.status}">
+                                ${status}
+                            </div>
+
+                        </div>
+                    `;
+                })
+                .join("");
+    }
+
+    /* =====================================================
+       FIELD REPORT SUBMISSION
+    ===================================================== */
+
+    function submitFieldReport(event) {
+
+        event.preventDefault();
+
+        const type =
+            $("incidentType");
+
+        const district =
+            $("incidentDistrict");
+
+        const location =
+            $("incidentLocation");
+
+        const description =
+            $("incidentDescription");
+
+        const photo =
+            $("incidentPhoto");
+
+        const statusText =
+            $("fieldReportStatus");
+
+        if (
+            !type ||
+            !district ||
+            !location ||
+            !description
+        ) {
+            return;
+        }
+
+        const locationValue =
+            location.value.trim();
+
+        const descriptionValue =
+            description.value.trim();
+
+        if (
+            !locationValue ||
+            !descriptionValue
+        ) {
+
+            if (statusText) {
+
+                statusText.textContent =
+                    "Please provide location and incident description.";
+            }
+
+            return;
+        }
+
+        const report = {
+
+            id:
+                "FR-" +
+                Date.now(),
+
+            type:
+                type.value,
+
+            district:
+                district.value,
+
+            location:
+                locationValue,
+
+            description:
+                descriptionValue,
+
+            photoName:
+                photo &&
+                photo.files &&
+                photo.files.length
+                    ? photo.files[0].name
+                    : "No photo attached",
+
+            timestamp:
+                new Date().toISOString(),
+
+            status:
+                navigator.onLine
+                    ? "synced"
+                    : "pending"
+        };
+
+        const reports =
+            readReports();
+
+        reports.push(report);
+
+        writeReports(
+            reports.slice(-25)
+        );
+
+        renderReports();
+
+        if (statusText) {
+
+            statusText.textContent =
+                navigator.onLine
+                    ? "Report captured • local sync complete"
+                    : "Report queued • waiting for network sync";
+        }
+
+        event.target.reset();
+
+        /*
+         * Expose latest field intelligence
+         * for the existing AI/risk layer.
+         */
+
+        window.NERSMART_LATEST_FIELD_REPORT =
+            report;
+
+        document.dispatchEvent(
+            new CustomEvent(
+                "nersmart:field-report",
+                {
+                    detail: report
+                }
+            )
+        );
+    }
+
+    /* =====================================================
+       DEVICE GPS
+    ===================================================== */
+
+    function useDeviceGps() {
+
+        const location =
+            $("incidentLocation");
+
+        const statusText =
+            $("fieldReportStatus");
+
+        if (!location) return;
+
+        if (!navigator.geolocation) {
+
+            if (statusText) {
+
+                statusText.textContent =
+                    "Device GPS is not available in this browser.";
+            }
+
+            return;
+        }
+
+        if (statusText) {
+
+            statusText.textContent =
+                "Requesting device GPS…";
+        }
+
+        navigator.geolocation.getCurrentPosition(
+
+            function (position) {
+
+                const latitude =
+                    position.coords.latitude
+                        .toFixed(6);
+
+                const longitude =
+                    position.coords.longitude
+                        .toFixed(6);
+
+                location.value =
+                    `${latitude}, ${longitude}`;
+
+                if (statusText) {
+
+                    statusText.textContent =
+                        "Device GPS captured";
+                }
+            },
+
+            function () {
+
+                if (statusText) {
+
+                    statusText.textContent =
+                        "GPS permission unavailable — enter coordinates manually";
+                }
+            },
+
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 30000
+            }
+        );
+    }
+
+    /* =====================================================
+       OFFLINE SYNC
+    ===================================================== */
+
+    function syncReports() {
+
+        const reports =
+            readReports();
+
+        const statusText =
+            $("fieldReportStatus");
+
+        /*
+         * Do NOT pretend that an offline device has
+         * synchronized with a server.
+         */
+
+        if (!navigator.onLine) {
+
+            if (statusText) {
+
+                statusText.textContent =
+                    "Offline — reports remain safely queued";
+            }
+
+            renderReports();
+
+            return;
+        }
+
+        let changed = false;
+
+        const updated =
+            reports.map((report) => {
+
+                if (
+                    report.status ===
+                    "pending"
+                ) {
+
+                    changed = true;
+
+                    return {
+                        ...report,
+                        status: "synced",
+                        syncedAt:
+                            new Date().toISOString()
+                    };
+                }
+
+                return report;
+            });
+
+        if (changed) {
+
+            writeReports(updated);
+        }
+
+        renderReports();
+
+        if (statusText) {
+
+            statusText.textContent =
+                changed
+                    ? "Sync complete • local queue cleared"
+                    : "All field reports are already synchronized";
+        }
+    }
+
+    /* =====================================================
+       MULTILINGUAL ALERTS
+    ===================================================== */
+
+    const translations = {
+
+        en: {
+            title:
+                "Route A blocked",
+            body:
+                "Alternate corridor recommended. Authority notification prepared."
+        },
+
+        hi: {
+            title:
+                "Route A अवरुद्ध",
+            body:
+                "वैकल्पिक मार्ग की सिफारिश की गई है। प्राधिकरण को सूचना तैयार है।"
+        },
+
+        as: {
+            title:
+                "Route A বন্ধ",
+            body:
+                "বিকল্প কৰিডৰৰ পৰামৰ্শ দিয়া হৈছে। কৰ্তৃপক্ষৰ জাননী প্ৰস্তুত কৰা হৈছে।"
+        }
+
+    };
+
+    function updateLanguagePreview() {
+
+        const select =
+            $("alertLanguage");
+
+        const preview =
+            $("notificationPreview");
+
+        if (!select || !preview) {
+            return;
+        }
+
+        const copy =
+            translations[
+                select.value
+            ] || translations.en;
+
+        preview.innerHTML = `
+            <strong>
+                ${escapeHtml(copy.title)}
+            </strong>
+            <br>
+            <span>
+                ${escapeHtml(copy.body)}
+            </span>
+        `;
+    }
+
+    /* =====================================================
+       DISTRICT CONNECTIVITY
+    ===================================================== */
+
+    const districtData = [
+
+        {
+            district: "Tawang",
+            score: 68,
+            status: "WATCH",
+            note: "Weather-sensitive corridor"
+        },
+
+        {
+            district: "West Kameng",
+            score: 74,
+            status: "STABLE",
+            note: "Primary corridor monitored"
+        },
+
+        {
+            district: "East Kameng",
+            score: 79,
+            status: "STABLE",
+            note: "Good accessibility"
+        },
+
+        {
+            district: "Kamrup Metro",
+            score: 92,
+            status: "GOOD",
+            note: "High network connectivity"
+        },
+
+        {
+            district: "Dima Hasao",
+            score: 61,
+            status: "WATCH",
+            note: "Terrain risk elevated"
+        },
+
+        {
+            district: "Lohit",
+            score: 71,
+            status: "MONITORED",
+            note: "Weather and route watch"
+        }
+
+    ];
+
+    function renderDistrictConnectivity() {
+
+        const container =
+            $("districtConnectivityGrid");
+
+        if (!container) return;
+
+        container.innerHTML =
+            districtData
+                .map((item) => {
+
+                    return `
+                        <div class="sih-district-card">
+
+                            <div class="sih-district-top">
+
+                                <strong>
+                                    ${escapeHtml(
+                                        item.district
+                                    )}
+                                </strong>
+
+                                <span>
+                                    ${escapeHtml(
+                                        item.status
+                                    )}
+                                </span>
+
+                            </div>
+
+                            <div class="sih-district-score">
+                                ${item.score}%
+                            </div>
+
+                            <div class="sih-district-bar">
+                                <span
+                                    style="width:${item.score}%"
+                                ></span>
+                            </div>
+
+                            <small>
+                                ${escapeHtml(
+                                    item.note
+                                )}
+                            </small>
+
+                        </div>
+                    `;
+                })
+                .join("");
+    }
+
+    /* =====================================================
+       INTEGRATION STATUS
+    ===================================================== */
+
+    const integrations = [
+
+        {
+            name: "Weather API",
+            type: "Live meteorological feed",
+            state: "LIVE"
+        },
+
+        {
+            name: "Vehicle GPS",
+            type: "Fleet telemetry interface",
+            state: "ACTIVE"
+        },
+
+        {
+            name: "Transport Database",
+            type: "Route and logistics adapter",
+            state: "READY"
+        },
+
+        {
+            name: "Government Monitoring",
+            type: "Authority data adapter",
+            state: "READY"
+        },
+
+        {
+            name: "Field Inputs",
+            type: "Geo-tagged local reports",
+            state: "LOCAL"
+        }
+
+    ];
+
+    function renderIntegrations() {
+
+        const container =
+            $("integrationStatusList");
+
+        if (!container) return;
+
+        container.innerHTML =
+            integrations
+                .map((item) => {
+
+                    const stateClass =
+                        item.state === "READY" ||
+                        item.state === "ACTIVE" ||
+                        item.state === "LIVE"
+                            ? "ready"
+                            : "";
+
+                    return `
+                        <div class="sih-integration-item">
+
+                            <div class="sih-integration-main">
+
+                                <div class="sih-integration-icon">
+                                    ●
+                                </div>
+
+                                <div>
+
+                                    <div class="sih-integration-name">
+                                        ${escapeHtml(
+                                            item.name
+                                        )}
+                                    </div>
+
+                                    <span class="sih-integration-type">
+                                        ${escapeHtml(
+                                            item.type
+                                        )}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <span
+                                class="sih-integration-state ${stateClass}"
+                            >
+                                ${escapeHtml(
+                                    item.state
+                                )}
+                            </span>
+
+                        </div>
+                    `;
+                })
+                .join("");
+    }
+
+    /* =====================================================
+       LIVE WEATHER
+    ===================================================== */
+
+    const weatherDescriptions = {
+
+        0: "Clear sky",
+        1: "Mainly clear",
+        2: "Partly cloudy",
+        3: "Overcast",
+        45: "Fog",
+        48: "Rime fog",
+        51: "Light drizzle",
+        53: "Drizzle",
+        55: "Heavy drizzle",
+        61: "Light rain",
+        63: "Rain",
+        65: "Heavy rain",
+        71: "Light snow",
+        73: "Moderate snow",
+        75: "Heavy snow",
+        80: "Rain showers",
+        81: "Rain showers",
+        82: "Heavy rain showers",
+        95: "Thunderstorm",
+        96: "Thunderstorm with hail",
+        99: "Severe thunderstorm"
+
+    };
+
+    async function loadLiveWeather() {
+
+        try {
+
+            const response =
+                await fetch(
+                    weatherUrl,
+                    {
+                        cache: "no-store"
+                    }
+                );
+
+            if (!response.ok) {
+                throw new Error(
+                    "Weather request failed"
+                );
+            }
+
+            const data =
+                await response.json();
+
+            const current =
+                data.current || {};
+
+            const probability =
+                data.hourly &&
+                Array.isArray(
+                    data.hourly
+                        .precipitation_probability
+                )
+                    ? data.hourly
+                        .precipitation_probability[0]
+                    : null;
+
+            const description =
+                weatherDescriptions[
+                    current.weather_code
+                ] ||
+                "Weather update";
+
+            /* Main dashboard weather */
+
+            if (
+                $("temperature") &&
+                Number.isFinite(
+                    current.temperature_2m
+                )
+            ) {
+
+                $("temperature").textContent =
+                    `${Math.round(
+                        current.temperature_2m
+                    )}°C`;
+            }
+
+            if ($("weatherCondition")) {
+
+                $("weatherCondition")
+                    .textContent =
+                    description;
+            }
+
+            if (
+                $("rainProbability") &&
+                probability !== null
+            ) {
+
+                $("rainProbability")
+                    .textContent =
+                    `${probability}%`;
+            }
+
+            if (
+                $("wind") &&
+                Number.isFinite(
+                    current.wind_speed_10m
+                )
+            ) {
+
+                $("wind").textContent =
+                    `${Math.round(
+                        current.wind_speed_10m
+                    )} km/h`;
+            }
+
+            /* Field Operations weather */
+
+            if (
+                $("liveWeatherTemperature") &&
+                Number.isFinite(
+                    current.temperature_2m
+                )
+            ) {
+
+                $("liveWeatherTemperature")
+                    .textContent =
+                    `${Math.round(
+                        current.temperature_2m
+                    )}°C`;
+            }
+
+            if ($("liveWeatherCondition")) {
+
+                $("liveWeatherCondition")
+                    .textContent =
+                    description;
+            }
+
+            if ($("liveWeatherDetails")) {
+
+                const rain =
+                    probability === null
+                        ? "—"
+                        : `${probability}%`;
+
+                const wind =
+                    Number.isFinite(
+                        current.wind_speed_10m
+                    )
+                        ? `${Math.round(
+                            current.wind_speed_10m
+                        )} km/h`
+                        : "—";
+
+                $("liveWeatherDetails")
+                    .textContent =
+                    `Rain probability ${rain} • Wind ${wind}`;
+            }
+
+        } catch (error) {
+
+            console.warn(
+                "NER-SMART weather feed unavailable:",
+                error
+            );
+
+            if ($("liveWeatherCondition")) {
+
+                $("liveWeatherCondition")
+                    .textContent =
+                    "Live feed unavailable";
+            }
+
+            if ($("liveWeatherDetails")) {
+
+                $("liveWeatherDetails")
+                    .textContent =
+                    "Using dashboard monitoring data";
+            }
+        }
+    }
+
+    /* =====================================================
+       FIELD OPERATIONS NAVIGATION
+    ===================================================== */
+
+    function setupFieldOperationsNavigation() {
+
+        const nav =
+            $("fieldOperationsNav");
+
+        const hub =
+            $("fieldOperationsHub");
+
+        if (!nav || !hub) return;
+
+        nav.addEventListener(
+            "click",
+            function () {
+
+                hub.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+                document
+                    .querySelectorAll(
+                        ".nav-item"
+                    )
+                    .forEach(
+                        (item) => {
+                            item.classList.remove(
+                                "active"
+                            );
+                        }
+                    );
+
+                nav.classList.add(
+                    "active"
+                );
+            }
+        );
+    }
+
+    /* =====================================================
+       INITIALIZATION
+    ===================================================== */
+
+    function initFieldOperations() {
+
+        const form =
+            $("fieldReportForm");
+
+        const gps =
+            $("useGpsBtn");
+
+        const sync =
+            $("syncNowBtn");
+
+        const language =
+            $("alertLanguage");
+
+        if (form) {
+
+            form.addEventListener(
+                "submit",
+                submitFieldReport
+            );
+        }
+
+        if (gps) {
+
+            gps.addEventListener(
+                "click",
+                useDeviceGps
+            );
+        }
+
+        if (sync) {
+
+            sync.addEventListener(
+                "click",
+                syncReports
+            );
+        }
+
+        if (language) {
+
+            language.addEventListener(
+                "change",
+                updateLanguagePreview
+            );
+        }
+
+        window.addEventListener(
+            "online",
+            updateNetworkState
+        );
+
+        window.addEventListener(
+            "offline",
+            updateNetworkState
+        );
+
+        updateNetworkState();
+
+        renderReports();
+
+        updateLanguagePreview();
+
+        renderDistrictConnectivity();
+
+        renderIntegrations();
+
+        loadLiveWeather();
+
+        setupFieldOperationsNavigation();
+
+        /*
+         * Refresh weather every 10 minutes.
+         */
+
+        setInterval(
+            loadLiveWeather,
+            10 * 60 * 1000
+        );
+    }
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initFieldOperations
+        );
+
+    } else {
+
+        initFieldOperations();
+
+    }
+
+})();
+/* =========================================================
+   START SIMULATION — AUTO SCROLL TO LIVE INTELLIGENCE
+   ========================================================= */
+
+(function () {
+    "use strict";
+
+    const startButton =
+        document.getElementById("startDemoBtn");
+
+    const intelligenceSection =
+        document.querySelector(".kpi-grid");
+
+    if (!startButton || !intelligenceSection) {
+        return;
+    }
+
+    startButton.addEventListener("click", function () {
+
+        setTimeout(function () {
+
+            intelligenceSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }, 100);
+
+    });
+
+})();   
+/* =========================================================
+   NER-SMART — FINAL SIMULATION RESET FIX
+   Clears all running simulation timers before reset
+========================================================= */
+
+(function () {
+
+    const startOld = document.getElementById("startDemoBtn");
+    const resetOld = document.getElementById("resetDemoBtn");
+
+    if (!startOld || !resetOld) return;
+
+    const originalStart = startLiveSimulation;
+    const originalReset = resetLiveSimulation;
+
+    let simulationTimers = [];
+
+    /* Remove old listeners */
+    const startButton = startOld.cloneNode(true);
+    const resetButton = resetOld.cloneNode(true);
+
+    startOld.replaceWith(startButton);
+    resetOld.replaceWith(resetButton);
+
+    /* ---------------------------------------------
+       START — capture simulation timers
+    --------------------------------------------- */
+
+    startButton.addEventListener("click", function (event) {
+
+        event.preventDefault();
+
+        simulationTimers.forEach(function (timer) {
+            clearTimeout(timer);
+        });
+
+        simulationTimers = [];
+
+        const nativeSetTimeout = window.setTimeout;
+
+        window.setTimeout = function (callback, delay, ...args) {
+
+            const timerId =
+                nativeSetTimeout(callback, delay, ...args);
+
+            simulationTimers.push(timerId);
+
+            return timerId;
+        };
+
+        try {
+
+            originalStart();
+
+        } finally {
+
+            window.setTimeout = nativeSetTimeout;
+
+        }
+
+    });
+
+
+    /* ---------------------------------------------
+       RESET — stop everything first
+    --------------------------------------------- */
+
+    resetButton.addEventListener("click", function (event) {
+
+        event.preventDefault();
+
+        /* Stop every pending simulation stage */
+        simulationTimers.forEach(function (timer) {
+            clearTimeout(timer);
+        });
+
+        simulationTimers = [];
+
+        /* Reset dashboard */
+        originalReset();
+
+    });
+
+})();
+/* =========================================================
+   REMOVE INCIDENT MARKER ON SIMULATION RESET
+========================================================= */
+
+(function () {
+
+    const resetButton = document.getElementById("resetDemoBtn");
+
+    if (!resetButton) return;
+
+    resetButton.addEventListener("click", function () {
+
+        setTimeout(function () {
+
+            /* Remove simulation incident markers */
+            document
+                .querySelectorAll(
+                    ".incident-marker, .simulation-incident-marker, [data-incident-marker='true']"
+                )
+                .forEach(function (marker) {
+                    marker.remove();
+                });
+
+            /* Remove any simulation blockage overlays */
+            document
+                .querySelectorAll(
+                    ".incident-overlay, .simulation-incident, .landslide-marker"
+                )
+                .forEach(function (element) {
+                    element.remove();
+                });
+
+        }, 50);
+
+    });
+
+})();
+/* =========================================================
+   NER-SMART — FINAL INCIDENT MARKER RESET OVERRIDE
+   Do not modify existing simulation code
+========================================================= */
+
+(function () {
+    const resetButton = document.getElementById("resetDemoBtn");
+
+    if (!resetButton) return;
+
+    resetButton.addEventListener("click", function () {
+
+        setTimeout(function () {
+
+            /* Remove simulated incident layers from Leaflet map */
+            if (typeof nerMap !== "undefined" && nerMap) {
+
+                Object.values(nerMap._layers || {}).forEach(function (layer) {
+
+                    try {
+
+                        if (
+                            layer &&
+                            typeof layer.getPopup === "function" &&
+                            layer.getPopup()
+                        ) {
+
+                            const content =
+                                String(
+                                    layer.getPopup().getContent() || ""
+                                ).toLowerCase();
+
+                            if (
+                                content.includes("landslide incident") ||
+                                content.includes("field report received") ||
+                                content.includes("verification confidence")
+                            ) {
+                                nerMap.removeLayer(layer);
+                            }
+                        }
+
+                    } catch (error) {
+                        /* Ignore unrelated Leaflet layers */
+                    }
+
+                });
+
+            }
+
+            /* Close any leftover incident popup */
+            document
+                .querySelectorAll(".leaflet-popup")
+                .forEach(function (popup) {
+
+                    const text =
+                        popup.textContent.toLowerCase();
+
+                    if (
+                        text.includes("landslide incident") ||
+                        text.includes("field report received")
+                    ) {
+                        popup.remove();
+                    }
+
+                });
+
+        }, 150);
+
+    });
 
 })();
