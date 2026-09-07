@@ -2116,7 +2116,7 @@ function updateWeatherIntelligence() {
         "PAARIJAAT",
         "RO LI BI ANN",
         "SURAJ KUMAR SINGH",
-        "AAKASH YADAV",
+        "AKASH YADAV",
         "RISHU RAJ"
     ];
 
