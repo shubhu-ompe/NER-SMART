@@ -4210,3 +4210,31 @@ function updateWeatherIntelligence() {
     });
 
 })();
+/* =========================================================
+   FINAL — START SIMULATION AUTO SCROLL TO MAP
+========================================================= */
+
+(function () {
+
+    const startButton =
+        document.getElementById("startDemoBtn");
+
+    const mapSection =
+        document.querySelector(".map-card");
+
+    if (!startButton || !mapSection) return;
+
+    startButton.addEventListener("click", function () {
+
+        setTimeout(function () {
+
+            mapSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }, 150);
+
+    });
+
+})();
